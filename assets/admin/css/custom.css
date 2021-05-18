@@ -1,0 +1,12 @@
+.floating-btns a{
+     border:1px solid #ccc;
+     padding-left:15px;
+     padding-right:15px;
+     padding-top:5px;
+     background:#f9f9f9;
+     padding-bottom:5px;
+     border-radius:100px;
+ }
+ .floating-btns.right{
+    float:right;   
+ }
