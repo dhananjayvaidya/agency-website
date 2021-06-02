@@ -39,6 +39,8 @@ class Welcome extends CI_Controller {
 		$this->load->view('front/index', $page_data);
 	}
 	public function team(){
+		$data = $this->db->get_where("team", array("status"=>1))->result_array();
+		$page_data['teams'] = $data;
 		$page_data['page_title'] = "Our Team";
 		$page_data['page'] = "team";
 		$this->load->view('front/index', $page_data);

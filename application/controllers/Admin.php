@@ -19,6 +19,7 @@ class Admin extends CI_Controller {
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index(){
+		echo 1;
 		if($this->input->post()){
 			$email = $this->input->post('email_id');
 			$password = sha1($this->input->post('password'));
