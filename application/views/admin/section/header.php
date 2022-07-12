@@ -60,6 +60,11 @@
                     <i class="fas fa-fw fa-users"></i>
                     <span>Team</span></a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="<?php echo base_url();?>admin/portfolio">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Portfolio</span></a>
+            </li>
             <!-- Nav Item - Pages Collapse Menu -->
             
             
