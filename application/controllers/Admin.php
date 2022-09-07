@@ -145,36 +145,57 @@ class Admin extends CI_Controller {
 				$this->load->view('admin/index',$page_data);
 			break;
 			case "add":
+				
 				if ($this->input->post()){
-					if ($_FILES['profile_photo']['name'] != ""){
-						$upload_data = $this->do_upload(array('upload_path'=>'./uploads/teams/','name'=>'profile_photo'));
-					}
+					echo "<pre>";
+				print_r($_FILES);
+				die();
+					$tmp_media = $_FILES['media'];
+					unset($_FILES['media']);
 					$data = array(
-						"full_name" => $this->input->post('full_name'),
-						"designation" => $this->input->post('designation'),
-						"fb_link"	=> $this->input->post('fb_link'),
-						"ln_link"	=> $this->input->post('ln_link'),
-						"tw_link"	=> $this->input->post('tw_link'),
-						"about_me"	=> $this->input->post('about_me'),
-						"timestamp" => time(),
+						"cat_id"		=> $this->input->post('cat_id'),
+						"project_name" 	=> $this->input->post("project_name"),
+						"project_desc" 	=> $this->input->post("project_desc"),
+						"client_name" 	=> $this->input->post("client_name"),
+						"project_link" 	=> $this->input->post("project_link"),
+						"project_date" 	=> $this->input->post("project_date"),
+						"status" 		=> $this->input->post("status"),
+						"timestamp" 	=> time(),
 						"mod_timestamp" => time()
 					);
-					
-					if (count($upload_data) >= 1 ){
-						$data['profile_photo'] = "uploads/teams/".$upload_data['file_name'];
-					}
-					
-					if ($this->db->insert('team',$data)){
-						$page_data['message'] = "Successfully Created New Team Member";
+					if ($this->db->insert('portfolios',$data)){
+						$pid = $this->db->insert_id();
+						for($x=0;$x<count($tmp_media['name']);$x++){
+							$_FILES['media1'] = [
+								"name" => $tmp_media['name'][$x],
+								"tmp_name" => $tmp_media['tmp_name'][$x],
+								"size" => $tmp_media['size'][$x],
+								"error" => $tmp_media['error'][$x],
+								"type" => $tmp_media['type'][$x]
+							];
+							$upload_data = $this->do_upload(array('upload_path'=>'./uploads/portfolio/','name'=>'media1'));
+							print_r($upload_data);
+							$media_data = [
+								"pid"			=> $pid,
+								"media_type"	=> "IMG",
+								"media_content" => "uploads/portfolio/".$upload_data['file_name'],
+								"status"		=> 1,
+								"timestamp" 	=> time(),
+								"mod_timestamp" => time()
+							];
+							$this->db->insert("portfolio_media",$media_data);
+							unset($_FILES);
+						}
+						$page_data['message'] = "Successfully Created New Portfolio";
 					}else{
-						$page_data['message'] = "Problem Occur while uploading the new team member.";
+						$page_data['message'] = "Problem Occur while uploading the new portfolio.";
 					}
-					
 				}
-				
+				$categories = $this->db->get('portfolio_categories')->result_array();
 				$page_data['page_title'] = "Add Team";
 				$page_data['page'] = "portfolio/form";
 				$page_data['action'] = "Add";
+				$page_data['categories'] = $categories;
 				$this->load->view('admin/index',$page_data);
 			break;
 			case "edit":
